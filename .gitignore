@@ -51,3 +51,6 @@ Module.symvers
 Mkfile.old
 dkms.conf
 .source.txt
+out/test1.dbg
+out/test1.sym
+out/test1.vs
