@@ -1,7 +1,9 @@
+#import "common/lib/common-global.asm"
 #import "framework/lib/string-global.asm"
 
 
-BasicUpstart2(start)  // 10 sys$0810
+//BasicUpstart2(start)  // 10 sys$0810
+c128lib_BasicUpstart128(start)
 
 
 string1: 
