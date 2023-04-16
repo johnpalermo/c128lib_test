@@ -106,7 +106,6 @@ start:
 
 // -----------------------------------------------------------------------------------------------------
 // -----------------------------------------------------------------------------------------------------
-.break
 string_compare_test1:   
     ldy #0
 /*
@@ -129,10 +128,9 @@ string_compare_test1:
     4) If the strings are equal, the Y register will contain their lengths. 
     5) The contents at string1Address and string2Address are left unchanged.
 */
-    // Y=0
+    // Y=0  (length 256)
     // Z=1,C=1
 // -----------------------------------------------------------------------------------------------------
-.break
 string_compare_test2:   
     ldy #0 //clear Y
     lda #1 //clear Z flag
@@ -141,7 +139,7 @@ string_compare_test2:
     // Z=0,C=0
     @c128lib_StringCompare(c128lib.String.ZP_SRC,c128lib.String.ZP_TRG,false)
     // Y=0
-    // Z=1,C=1
+    // Z=1,C=1 (length 256)
 // -----------------------------------------------------------------------------------------------------
 // -----------------------------------------------------------------------------------------------------
 string_length_test1:
@@ -153,8 +151,8 @@ string_length_test1:
     // length= garbage
     @c128lib_StringLength(string1,false)
     sty length
-    // Y=0
-    // Z=1,C=1
+    // Y=0  
+    // Z=1,C=1   (length 256)
     // length=0
 // -----------------------------------------------------------------------------------------------------
 string_length_test2:
@@ -168,7 +166,7 @@ string_length_test2:
     @c128lib_StringLength(c128lib.String.ZP_SRC,false)
     sty length
     // Y=0
-    // Z=1,C=1
+    // Z=1,C=1   (length 256)
     // length=0
 // -----------------------------------------------------------------------------------------------------
 // -----------------------------------------------------------------------------------------------------
@@ -181,7 +179,7 @@ string_copy_test1:
     // string1 <> string3
     @c128lib_StringCopy(string1,string3,false)
     // Y = 0
-    // Z=1,C=1
+    // Z=1,C=1      (length > 255)
     // string1 == string3
 // -----------------------------------------------------------------------------------------------------  
 string_copy_test2:
@@ -196,10 +194,20 @@ string_copy_test2:
     // Y=0
     // Z=0,C=0
     // string1 <> string4
+    // string1 == #$1c0e
+    // string4 == #$1fb6
+    // $fa == 0e 1c b6 1f
+    // string1 == 
+    // string4 == 
     @c128lib_StringCopy(c128lib.String.ZP_SRC,c128lib.String.ZP_TRG,false)
     // Y = 0
     // Z=1,C=1
     // string1 == string4
+    // string1 == #$1c0e
+    // string4 == #$1fb6
+    // $fa == 0e 1c b6 1f
+    // string1 == 
+    // string4 == 
 // -----------------------------------------------------------------------------------------------------
 // -----------------------------------------------------------------------------------------------------
 string_copyleft_test1:
@@ -207,9 +215,15 @@ string_copyleft_test1:
     sta num_chars
     //num_chars = 255
     //string5 <> string6
+    // string5 == #$20ee
+    // string6 == #$2226
+    // $fa == 0e 1c b6 1f
     @c128lib_StringCopyLeft(string5,string6,num_chars,false)
     //num_chars = 255
     //string5 == string6
+    // string5 == #$20ee
+    // string6 == #$2226
+    // $fa == 0e 1c b6 1f
 // -----------------------------------------------------------------------------------------------------  
 string_copyleft_test2:
     lda #<string5
@@ -224,9 +238,15 @@ string_copyleft_test2:
 
     //num_chars = 255
     //string5 <> string7
+    // string5 == #$20ee
+    // string7 == #$235e
+    // $fa == ee 20 5e 23
     @c128lib_StringCopyLeft(c128lib.String.ZP_SRC,c128lib.String.ZP_TRG,num_chars,false)
     //num_chars = 255
     //string5 == string7
+    // string5 == #$20ee
+    // string7 == #$235e
+    // $fa == ee 20 5e 23
 // -----------------------------------------------------------------------------------------------------
 // -----------------------------------------------------------------------------------------------------
 string_copyright_test1:
@@ -237,11 +257,17 @@ string_copyright_test1:
     //string5 <> string8
     //length = 255
     //num_chars = 6
+    // string5 == #$20ee
+    // string8 == #$2496
+    // $fa == ee 20 5e 23
     @c128lib_StringCopyRight(string5,string8,length, num_chars,false)
     //string5 stays unchanged.
-    //string8 = "PALERMO\0"
+    //string8 = "PALERM\0"
     //length = 255
     //num_chars = 6
+    // string5 == #$20ee
+    // string8 == #$2496
+    // $fa == ee 20 5e 23
 // -----------------------------------------------------------------------------------------------------  
 string_copyright_test2:
     lda #<string9
@@ -251,11 +277,17 @@ string_copyright_test2:
     //string5 <> string9
     //length = 255
     //num_chars = 6
+    // string5 == #$20ee
+    // string9 == #$25ce
+    // $fa == ee 20 ce 25
     @c128lib_StringCopyRight(c128lib.String.ZP_SRC,c128lib.String.ZP_TRG,length,num_chars,false)    
     //string5 stays unchanged.
     //string9 = "PALERMO\0"
     //length = 255
     //num_chars = 6
+    // string5 == #$20ee
+    // string9 == #$25ce
+    // $fa == ee 20 ce 25
 // -----------------------------------------------------------------------------------------------------
 // -----------------------------------------------------------------------------------------------------
 string_copymid_test1:
@@ -266,11 +298,17 @@ string_copymid_test1:
     //string5 <> string10 
     //start_pos = 252
     //num_chars = 255
+    // string5 == #$20ee
+    // string10 == #$2706
+    // $fa == ee 20 ce 25
     @c128lib_StringCopyMid(string5,string10,start_pos,num_chars,false)
     //string5 stays unchanged
-    //string10 = "LERM\0"
+    //string10 = "ERMO "
     //start_pos = 252
     //num_chars = 255
+    // string5 == #$20ee
+    // string10 == #$2706
+    // $fa == ee 20 ce 25
 // -----------------------------------------------------------------------------------------------------
 string_copymid_test2:
     lda #<string11
@@ -280,19 +318,31 @@ string_copymid_test2:
     //string5 <> string11
     //start_pos = 252
     //num_chars = 255
+    // string5 == #$20ee
+    // string11 == #$283e
+    // $fa == ee 20 3e 28
     @c128lib_StringCopyMid(c128lib.String.ZP_SRC,c128lib.String.ZP_TRG,start_pos,num_chars,false)
     //string5 stays unchanged
-    //string11 = "LERM\0"
+    //string11 = "ERMO "
     //start_pos = 252
     //num_chars = 255
+    // string5 == #$20ee
+    // string11 == #$283e
+    // $fa == ee 20 3e 28
 // -----------------------------------------------------------------------------------------------------
 // -----------------------------------------------------------------------------------------------------
 string_concat_test1:
-    //length = 255
+    // length = 255
     // Make note of contents of $FA, $FB, $FC, $FD
+    // string12 == #$2976
+    // string13 == #$2bda
+    // $fa == ee 20 3e 28
     @c128lib_StringConcatenate(string12,string13,length,false)
-    //length = 255 
+    // length = 255 
     // Make note of contents of $FA, $FB, $FC, $FD and compare to before
+    // string12 == #$2976
+    // string13 == #$2bda
+    // $fa == ee 20 3e 28
 // -----------------------------------------------------------------------------------------------------
 string_concat_test2:
     lda #<string14
@@ -305,10 +355,16 @@ string_concat_test2:
     lda #>string15
     sta c128lib.String.ZP_TRG+1
 
-    //length = 255
+    // length = 255
     // Make note of contents of $FA, $FB, $FC, $FD
+    // string14 == #$2c8b
+    // string15 == #$2eef
+    // $fa == 8b 2c ef 2e
     @c128lib_StringConcatenate(c128lib.String.ZP_SRC,c128lib.String.ZP_TRG,length,false)
     //length = 255 
     // Make note of contents of $FA, $FB, $FC, $FD and compare to before
-
+    // string14 == #$2c8b
+    // string15 == #$2eef
+    // $fa == 8b 2c ef 2e
+    
     jmp *  

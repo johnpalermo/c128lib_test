@@ -14,41 +14,41 @@ string2:
     .text "HELLO WORLD!"
     .byte 0
 
-.break
 start:
     lda #<string1
-    sta c128lib.String.STRING_SRC
+    sta c128lib.String.ZP_SRC
     lda #>string1
-    sta c128lib.String.STRING_SRC+1
+    sta c128lib.String.ZP_SRC+1
 
     lda #<string2
-    sta c128lib.String.STRING_TRG
+    sta c128lib.String.ZP_TRG
     lda #>string2
-    sta c128lib.String.STRING_TRG+1
+    sta c128lib.String.ZP_TRG+1
 
 string_compare_test1:   
-.break
     ldy #0
     // Y=0
     // Z=0,C=0
     // string1 = "HELLO!\0"
-    // string2 = "HELLO!\0"
+    // string2 = "HELLO WORLD!"
     @c128lib_StringCompare(string1,string2,false)
-    // Z=1,C=0
-    // Y=6
+    // Z=0,C=0
+    // Y=5
     // string1 = "HELLO!\0"
-    // string2 = "HELLO!\0"
-string_compare_test2:   
+    // string2 = "HELLO WORLD!"
 .break
+string_compare_test2:   
     ldy #0 //clear Y
     lda #1 //clear Z flag
     // Y=0
     // Z=0,C=0
     // string1 = "HELLO!\0"
-    // string2 = "HELLO!\0"
-    @c128lib_StringCompare(c128lib.String.STRING_SRC,c128lib.String.STRING_TRG,false)
-    // Z=1,C=0
-    // Y=6
+    // string2 = "HELLO WORLD!"
+    @c128lib_StringCompare(c128lib.String.ZP_SRC,c128lib.String.ZP_TRG,false)
+    // Z=0,C=0
+    // Y=5
     // string1 = "HELLO!\0"
-    // string2 = "HELLO!\0"
+    // string2 = "HELLO WORLD!"
 
+.break
+jmp *
