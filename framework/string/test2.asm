@@ -95,17 +95,18 @@ start_pos:
 
 start:
     lda #<string1
-    sta c128lib.String.STRING_SRC
+    sta c128lib.String.ZP_SRC
     lda #>string1
-    sta c128lib.String.STRING_SRC+1
+    sta c128lib.String.ZP_SRC+1
 
     lda #<string2
-    sta c128lib.String.STRING_TRG
+    sta c128lib.String.ZP_TRG
     lda #>string2
-    sta c128lib.String.STRING_TRG+1
+    sta c128lib.String.ZP_TRG+1
 
 // -----------------------------------------------------------------------------------------------------
 // -----------------------------------------------------------------------------------------------------
+.break
 string_compare_test1:   
     ldy #0
 /*
@@ -131,13 +132,14 @@ string_compare_test1:
     // Y=0
     // Z=1,C=1
 // -----------------------------------------------------------------------------------------------------
+.break
 string_compare_test2:   
     ldy #0 //clear Y
     lda #1 //clear Z flag
     clc
     // Y=0
     // Z=0,C=0
-    @c128lib_StringCompare(c128lib.String.STRING_SRC,c128lib.String.STRING_TRG,false)
+    @c128lib_StringCompare(c128lib.String.ZP_SRC,c128lib.String.ZP_TRG,false)
     // Y=0
     // Z=1,C=1
 // -----------------------------------------------------------------------------------------------------
@@ -163,7 +165,7 @@ string_length_test2:
     // Y=0
     // Z=0,C=0
     // length= garbage
-    @c128lib_StringLength(c128lib.String.STRING_SRC,false)
+    @c128lib_StringLength(c128lib.String.ZP_SRC,false)
     sty length
     // Y=0
     // Z=1,C=1
@@ -184,9 +186,9 @@ string_copy_test1:
 // -----------------------------------------------------------------------------------------------------  
 string_copy_test2:
     lda #<string4
-    sta c128lib.String.STRING_TRG
+    sta c128lib.String.ZP_TRG
     lda #>string4
-    sta c128lib.String.STRING_TRG+1    
+    sta c128lib.String.ZP_TRG+1    
 
     ldy #0 //clear Y
     lda #1 //clear Z flag
@@ -194,7 +196,7 @@ string_copy_test2:
     // Y=0
     // Z=0,C=0
     // string1 <> string4
-    @c128lib_StringCopy(c128lib.String.STRING_SRC,c128lib.String.STRING_TRG,false)
+    @c128lib_StringCopy(c128lib.String.ZP_SRC,c128lib.String.ZP_TRG,false)
     // Y = 0
     // Z=1,C=1
     // string1 == string4
@@ -211,18 +213,18 @@ string_copyleft_test1:
 // -----------------------------------------------------------------------------------------------------  
 string_copyleft_test2:
     lda #<string5
-    sta c128lib.String.STRING_SRC
+    sta c128lib.String.ZP_SRC
     lda #>string5
-    sta c128lib.String.STRING_SRC+1    
+    sta c128lib.String.ZP_SRC+1    
 
     lda #<string7
-    sta c128lib.String.STRING_TRG
+    sta c128lib.String.ZP_TRG
     lda #>string7
-    sta c128lib.String.STRING_TRG+1    
+    sta c128lib.String.ZP_TRG+1    
 
     //num_chars = 255
     //string5 <> string7
-    @c128lib_StringCopyLeft(c128lib.String.STRING_SRC,c128lib.String.STRING_TRG,num_chars,false)
+    @c128lib_StringCopyLeft(c128lib.String.ZP_SRC,c128lib.String.ZP_TRG,num_chars,false)
     //num_chars = 255
     //string5 == string7
 // -----------------------------------------------------------------------------------------------------
@@ -243,13 +245,13 @@ string_copyright_test1:
 // -----------------------------------------------------------------------------------------------------  
 string_copyright_test2:
     lda #<string9
-    sta c128lib.String.STRING_TRG
+    sta c128lib.String.ZP_TRG
     lda #>string9
-    sta c128lib.String.STRING_TRG+1  
+    sta c128lib.String.ZP_TRG+1  
     //string5 <> string9
     //length = 255
     //num_chars = 6
-    @c128lib_StringCopyRight(c128lib.String.STRING_SRC,c128lib.String.STRING_TRG,length,num_chars,false)    
+    @c128lib_StringCopyRight(c128lib.String.ZP_SRC,c128lib.String.ZP_TRG,length,num_chars,false)    
     //string5 stays unchanged.
     //string9 = "PALERMO\0"
     //length = 255
@@ -272,13 +274,13 @@ string_copymid_test1:
 // -----------------------------------------------------------------------------------------------------
 string_copymid_test2:
     lda #<string11
-    sta c128lib.String.STRING_TRG
+    sta c128lib.String.ZP_TRG
     lda #>string11
-    sta c128lib.String.STRING_TRG+1  
+    sta c128lib.String.ZP_TRG+1  
     //string5 <> string11
     //start_pos = 252
     //num_chars = 255
-    @c128lib_StringCopyMid(c128lib.String.STRING_SRC,c128lib.String.STRING_TRG,start_pos,num_chars,false)
+    @c128lib_StringCopyMid(c128lib.String.ZP_SRC,c128lib.String.ZP_TRG,start_pos,num_chars,false)
     //string5 stays unchanged
     //string11 = "LERM\0"
     //start_pos = 252
@@ -294,18 +296,18 @@ string_concat_test1:
 // -----------------------------------------------------------------------------------------------------
 string_concat_test2:
     lda #<string14
-    sta c128lib.String.STRING_SRC
+    sta c128lib.String.ZP_SRC
     lda #>string14
-    sta c128lib.String.STRING_SRC+1
+    sta c128lib.String.ZP_SRC+1
 
     lda #<string15
-    sta c128lib.String.STRING_TRG
+    sta c128lib.String.ZP_TRG
     lda #>string15
-    sta c128lib.String.STRING_TRG+1
+    sta c128lib.String.ZP_TRG+1
 
     //length = 255
     // Make note of contents of $FA, $FB, $FC, $FD
-    @c128lib_StringConcatenate(c128lib.String.STRING_SRC,c128lib.String.STRING_TRG,length,false)
+    @c128lib_StringConcatenate(c128lib.String.ZP_SRC,c128lib.String.ZP_TRG,length,false)
     //length = 255 
     // Make note of contents of $FA, $FB, $FC, $FD and compare to before
 
